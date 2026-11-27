@@ -1,0 +1,23 @@
+name: HW test binaries (fork only)
+on:
+  push:
+    branches: [ci/hw-test]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: aemiii91/miyoomini-toolchain:latest
+      options: --user root
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Build core
+      shell: bash
+      run: |
+        source /root/.bashrc
+        make core
+    - uses: actions/upload-artifact@v4
+      with:
+        name: onion-bin
+        path: build/.tmp_update/bin/
