@@ -11,6 +11,7 @@ $CC $FLAGS -static -o out/recent_test $FILES -lm
 if $CC $FLAGS -fsanitize=address,undefined -fno-sanitize=alignment -static-libasan -static-libubsan -o out/recent_test_asan $FILES -lm 2>/tmp/asan.err; then echo "asan build ok"; else echo "asan build failed:"; tail -5 /tmp/asan.err; fi
 ls -la out
 # "before" build against unpatched main
+git config --global --add safe.directory "$PWD"
 git fetch -q --depth 1 origin main && rm -rf /tmp/hwmain && mkdir -p /tmp/hwmain && git --work-tree=/tmp/hwmain checkout FETCH_HEAD -- src include && git reset -q
 grep -rl "/mnt/SDCARD" /tmp/hwmain/src/common | xargs sed -i 's#/mnt/SDCARD#/tmp/sdtest#g'
 M=/tmp/hwmain
